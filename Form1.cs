@@ -12,21 +12,10 @@ using System.Windows.Forms;
 
 namespace DrawingTimer
 {
-    public class TimeEntry
-    {
-        public ulong milliseconds = 0;
-        public DateTime date;
-
-        public override string ToString()
-        {
-            return string.Format("{0},{1}", this.milliseconds, this.date.ToShortDateString());
-        }
-    }
-
     public partial class Form1 : Form
     {
         bool started = false;
-        ulong numMillisecondsTotal = 0; // Starting value
+        ulong numSecondsTotal = 0; // Starting value
         List<TimeEntry> m_entries;
         TimeEntry thisSession;
         ulong[] goals = {
@@ -67,7 +56,7 @@ namespace DrawingTimer
 
         private void UpdateTimer()
         {
-            TimeSpan t = TimeSpan.FromMilliseconds(numMillisecondsTotal);
+            TimeSpan t = TimeSpan.FromSeconds(numSecondsTotal);
             string answer = string.Format("{0:D2}hrs {1:D2}mins {2:D2}secs",
                                     t.Hours,
                                     t.Minutes,
@@ -75,14 +64,22 @@ namespace DrawingTimer
 
             this.richTextBox1.Text = answer;
 
+            t = TimeSpan.FromSeconds(thisSession.seconds);
+            answer = string.Format("{0:D2}hrs {1:D2}mins {2:D2}secs",
+                                    t.Hours,
+                                    t.Minutes,
+                                    t.Seconds);
+            this.richTextBox2.Text = answer;
+
             foreach (var goal in goals)
             {
-                var millisecondsGoal = goal * 60 * 60 * 1000;
-                if (numMillisecondsTotal <= millisecondsGoal)
+                var goalInSeconds = goal * 60 * 60;
+                if (numSecondsTotal <= goalInSeconds)
                 {
-                    double ratio = (double)numMillisecondsTotal / (double)millisecondsGoal;
+                    double ratio = (double)numSecondsTotal / (double)goalInSeconds;
                     int whatever = (int)(ratio * 100);
                     this.progressBar1.Value = whatever;
+                    this.label4.Text = string.Format("{0}%", whatever);
                     this.label1.Text = string.Format("Progress Towards {0} Hours", goal);
                     break;
                 }
@@ -91,8 +88,8 @@ namespace DrawingTimer
 
         private void tickTimer_Tick(object sender, EventArgs e)
         {
-            numMillisecondsTotal += 100;
-            thisSession.milliseconds += 100;
+            ++numSecondsTotal;
+            ++thisSession.seconds;
             UpdateTimer();
         }
 
@@ -109,9 +106,9 @@ namespace DrawingTimer
                     if (date_split.Length < 2)
                         continue;
                     TimeEntry entry = new TimeEntry();
-                    entry.milliseconds = (ulong)Int64.Parse(date_split[0]);
+                    entry.seconds = (ulong)Int64.Parse(date_split[0]);
                     entry.date = Convert.ToDateTime(date_split[1]);
-                    numMillisecondsTotal += entry.milliseconds;
+                    numSecondsTotal += entry.seconds;
                     m_entries.Add(entry);
                 }
                 UpdateTimer();
@@ -130,4 +127,16 @@ namespace DrawingTimer
             File.WriteAllLines("time.data", convertList.ToArray());
         }
     }
+
+    public class TimeEntry
+    {
+        public ulong seconds = 0;
+        public DateTime date;
+
+        public override string ToString()
+        {
+            return string.Format("{0},{1}", this.seconds, this.date.ToShortDateString());
+        }
+    }
+
 }
