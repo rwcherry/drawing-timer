@@ -18,6 +18,9 @@ namespace DrawingTimer
         ulong numSecondsTotal = 0; // Starting value
         List<TimeEntry> m_entries;
         TimeEntry thisSession;
+
+        DateTime startDate;
+
         ulong[] goals = {
             10,
             50,
@@ -35,6 +38,9 @@ namespace DrawingTimer
             m_entries = new List<TimeEntry>();
             thisSession = new TimeEntry();
             thisSession.date = DateTime.Today;
+
+            // First day I started timing my drawing
+            startDate = new DateTime(2020, 6, 7);
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -52,6 +58,19 @@ namespace DrawingTimer
 
             started = !started;
             
+        }
+
+        private void UpdateStats()
+        {
+            double daysSince = (DateTime.Today.Subtract(startDate).TotalDays);
+            double avgSecondsPerDay = numSecondsTotal / daysSince;
+            double timeRemaining = ((1000 * 60 * 60) - numSecondsTotal);
+            double avgDaysRemaining = timeRemaining / avgSecondsPerDay;
+
+            this.labelStats.Text = string.Format(
+                "Days since start: {0}\n" +
+                "Avg minutes per day: {1:F2}\n" +
+                "Avg days remaining: {2:F2}\n", daysSince, avgSecondsPerDay / 60, avgDaysRemaining);
         }
 
         private void UpdateTimer()
@@ -84,6 +103,8 @@ namespace DrawingTimer
                     break;
                 }
             }
+
+            UpdateStats();
         }
 
         private void tickTimer_Tick(object sender, EventArgs e)
