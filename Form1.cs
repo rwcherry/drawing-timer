@@ -16,6 +16,12 @@ namespace DrawingTimer
     {
         bool started = false;
         ulong numSecondsTotal = 0; // Starting value
+
+        
+
+        Dictionary<string, ulong> dateToTime;
+        Dictionary<int, DateRangeInfo> dateRangeInfo;
+
         List<TimeEntry> m_entries;
         TimeEntry thisSession;
 
@@ -41,6 +47,8 @@ namespace DrawingTimer
 
             // First day I started timing my drawing
             startDate = new DateTime(2020, 6, 7);
+            dateToTime = new Dictionary<string, ulong>();
+            dateRangeInfo = new Dictionary<int, DateRangeInfo>();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -58,6 +66,40 @@ namespace DrawingTimer
 
             started = !started;
             
+        }
+
+        /// https://stackoverflow.com/questions/1847580/how-do-i-loop-through-a-date-range
+        public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)
+        {
+            for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
+                yield return day;
+        }
+
+        private string UpdateRolling(short range)
+        {
+            var daysAgo = DateTime.Today.AddDays(-range);
+            DateRangeInfo info = new DateRangeInfo();
+            info.range = range;
+
+            foreach (DateTime day in EachDay(daysAgo, DateTime.Today))
+            {
+                var key = day.ToShortDateString();
+                if (dateToTime.ContainsKey(key))
+                {
+                    info.rangeAvg += dateToTime[key];
+                }
+                else
+                {
+                    info.rangeMissed++;
+                }
+            }
+
+            info.rangeAvg = info.rangeAvg / info.range;
+            dateRangeInfo[range] = info;
+
+            return string.Format(
+                "{0} day average: {1}\n" +
+                "Days missed in last {0} days: {2}\n", info.range, info.rangeAvg / 60, info.rangeMissed);
         }
 
         private void UpdateStats()
@@ -129,9 +171,23 @@ namespace DrawingTimer
                     TimeEntry entry = new TimeEntry();
                     entry.seconds = (ulong)Int64.Parse(date_split[0]);
                     entry.date = Convert.ToDateTime(date_split[1]);
+
+                    var dateString = entry.date.ToShortDateString();
+                    if (dateToTime.ContainsKey(dateString))
+                    {
+                        dateToTime[dateString] = dateToTime[dateString] + entry.seconds;
+                    }
+                    else
+                    {
+                        dateToTime[dateString] = entry.seconds;
+                    }
+
                     numSecondsTotal += entry.seconds;
                     m_entries.Add(entry);
                 }
+                string sevenDayStats = UpdateRolling(7);
+                string thirtyDayStats = UpdateRolling(30);
+                this.labelStats2.Text = sevenDayStats + thirtyDayStats;
                 UpdateTimer();
             }
         }
@@ -160,4 +216,10 @@ namespace DrawingTimer
         }
     }
 
+    public class DateRangeInfo
+    {
+        public short range = 0;
+        public double rangeAvg = 0;
+        public double rangeMissed = 0;
+    }
 }

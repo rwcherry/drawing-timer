@@ -39,6 +39,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.labelStats2 = new System.Windows.Forms.Label();
             this.labelStats = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -70,7 +71,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(13, 430);
+            this.progressBar1.Location = new System.Drawing.Point(12, 348);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(776, 58);
             this.progressBar1.TabIndex = 2;
@@ -79,7 +80,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(6, 391);
+            this.label1.Location = new System.Drawing.Point(6, 309);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(249, 36);
             this.label1.TabIndex = 3;
@@ -119,7 +120,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F);
-            this.label4.Location = new System.Drawing.Point(383, 445);
+            this.label4.Location = new System.Drawing.Point(379, 365);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(44, 26);
             this.label4.TabIndex = 7;
@@ -127,13 +128,24 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.labelStats2);
             this.groupBox1.Controls.Add(this.labelStats);
             this.groupBox1.Location = new System.Drawing.Point(13, 192);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(776, 196);
+            this.groupBox1.Size = new System.Drawing.Size(776, 114);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Stats";
+            // 
+            // labelStats2
+            // 
+            this.labelStats2.AutoSize = true;
+            this.labelStats2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelStats2.Location = new System.Drawing.Point(229, 16);
+            this.labelStats2.Name = "labelStats2";
+            this.labelStats2.Size = new System.Drawing.Size(103, 72);
+            this.labelStats2.TabIndex = 1;
+            this.labelStats2.Text = "Stats Go Here\r\nStats Go Here\r\nStats Go Here\r\nStats Go Here";
             // 
             // labelStats
             // 
@@ -141,16 +153,16 @@
             this.labelStats.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelStats.Location = new System.Drawing.Point(6, 16);
             this.labelStats.Name = "labelStats";
-            this.labelStats.Size = new System.Drawing.Size(103, 18);
+            this.labelStats.Size = new System.Drawing.Size(103, 72);
             this.labelStats.TabIndex = 0;
-            this.labelStats.Text = "Stats Go Here";
+            this.labelStats.Text = "Stats Go Here\r\nStats Go Here\r\nStats Go Here\r\nStats Go Here";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(801, 500);
+            this.ClientSize = new System.Drawing.Size(801, 420);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -185,6 +197,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label labelStats;
+        private System.Windows.Forms.Label labelStats2;
     }
 }
 
